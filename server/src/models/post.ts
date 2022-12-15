@@ -1,13 +1,18 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-const PostSchema = new Schema(
+interface IPost {
+  title: String;
+  isPrivate: Boolean;
+}
+
+const PostSchema = new Schema<IPost>(
   {
     title: {
       type: String,
       required: true,
     },
-    private: {
+    isPrivate: {
       type: Boolean,
       required: true,
     },
@@ -15,6 +20,6 @@ const PostSchema = new Schema(
   { timestamps: true }
 );
 
-const PostModel = mongoose.model('Post', PostSchema);
+const PostModel = mongoose.model<IPost>('Post', PostSchema);
 
 export default PostModel;
