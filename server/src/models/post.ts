@@ -1,9 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 interface IPost {
-  title: String;
-  isPrivate: Boolean;
+  title: string;
+  content: string;
+  author: Types.ObjectId;
+  isPrivate: boolean;
 }
 
 const PostSchema = new Schema<IPost>(
@@ -11,6 +14,15 @@ const PostSchema = new Schema<IPost>(
     title: {
       type: String,
       required: true,
+    },
+    content: {
+      type: String,
+      requirted: true,
+    },
+    author: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
     },
     isPrivate: {
       type: Boolean,
