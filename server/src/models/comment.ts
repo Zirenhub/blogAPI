@@ -1,13 +1,20 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
+
 const Schema = mongoose.Schema;
 
-const CommentSchema = new Schema(
+interface IComment {
+  author: Types.ObjectId;
+  content: string;
+}
+
+const CommentSchema = new Schema<IComment>(
   {
-    username: {
-      type: String,
+    author: {
+      type: Schema.Types.ObjectId,
       required: true,
+      ref: 'User',
     },
-    comment: {
+    content: {
       type: String,
       required: true,
     },
@@ -15,6 +22,6 @@ const CommentSchema = new Schema(
   { timestamps: true }
 );
 
-const CommentModel = mongoose.model('Comment', CommentSchema);
+const CommentModel = mongoose.model<IComment>('Comment', CommentSchema);
 
 export default CommentModel;
