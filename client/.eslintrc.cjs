@@ -23,4 +23,5 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 0,
   },
+  ignorePatterns: ['tailwind.config.cjs', 'postcss.config.cjs'],
 };
