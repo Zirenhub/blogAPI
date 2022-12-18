@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 interface IRequestUser extends Request {
-  user: any;
+  user?: any;
 }
 
 const jwtAuth = (req: IRequestUser, res: Response, next: NextFunction) => {
@@ -13,7 +13,13 @@ const jwtAuth = (req: IRequestUser, res: Response, next: NextFunction) => {
     next();
   } catch (err) {
     res.clearCookie('token');
+    res.status(403).json({
+      status: 'error',
+      code: 403,
+      data: null,
+      message: 'Unauthorized',
+    });
   }
 };
 
-export default jwtAuth;
+export { jwtAuth, IRequestUser };
