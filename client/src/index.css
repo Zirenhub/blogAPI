@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
+
+@layer base {
+  body {
+    @apply m-0;
+    @apply p-0;
+    @apply box-border;
+  }
+
+  html {
+    font-family: Fira Sans;
+  }
+}
