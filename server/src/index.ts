@@ -5,8 +5,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 // routes
 import indexRoute from './routes/index';
-import signUpRoute from './routes/signUp';
-import logInRoute from './routes/logIn';
+import authRoute from './routes/auth';
 
 const app = express();
 
@@ -17,8 +16,7 @@ app.use(cookieParser());
 const PORT = process.env.PORT || 5000;
 
 app.use('/', indexRoute);
-app.use('/sign-up', signUpRoute);
-app.use('/log-in', logInRoute);
+app.use('/auth', authRoute);
 
 mongoose.connect(process.env.DB_URI!).then(() => {
   app.listen(PORT, () => console.log(`app listening on port ${PORT}`));
