@@ -13,9 +13,9 @@ const jwtAuth = (req: IRequestUser, res: Response, next: NextFunction) => {
     next();
   } catch (err) {
     res.clearCookie('token');
-    res.status(403).json({
+    res.status(401).json({
       status: 'error',
-      code: 403,
+      code: 401,
       data: null,
       message: 'Unauthorized',
     });

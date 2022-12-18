@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
+router.post('/:id/comment', jwtAuth, writeComment);
 router.get('/:id', getPost);
-router.post('/:id/comments', writeComment);
 
-router.get('/', getPosts);
 router.post('/', jwtAuth, createPost);
+router.get('/', getPosts);
 
 export default router;
