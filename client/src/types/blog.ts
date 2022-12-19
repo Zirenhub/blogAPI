@@ -1,4 +1,4 @@
-type Blog = {
+export type Blog = {
   _id: string;
   title: string;
   content: string;
@@ -9,4 +9,13 @@ type Blog = {
   _v: number;
 };
 
-export default Blog;
+export type UpdatedDateBlog = {
+  _id: string;
+  title: string;
+  content: string;
+  author: string;
+  isPrivate: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  _v: number;
+};
