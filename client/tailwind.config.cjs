@@ -4,14 +4,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#F4EAD5',
-        secondary: '#DAE2B6',
+        primary: '#1a1a1a',
+        secondary: '#303030',
         third: '#CCD6A6',
+        text: '#ffff38',
         background: '#FFFBE9',
         dimWhite: 'rgba(255, 255, 255, 0.8)',
       },
       fontFamily: {
-        'Fira Sans': ['"Fira Sans"', 'sans-serif'],
+        fira: ['"Fira Sans"', 'sans-serif'],
       },
       fontSize: {
         sm: '0.8rem',
@@ -24,6 +25,9 @@ module.exports = {
         '6xl': '4.632rem',
         '7xl': '5.232rem',
         '8xl': '6.132rem',
+      },
+      maxWidth: {
+        sidebar: '15rem',
       },
       screens: {
         xs: '480px',
