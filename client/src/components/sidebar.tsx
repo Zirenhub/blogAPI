@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import Blog from '../types/blog';
+import { useEffect, useState } from 'react';
+import { Blog, UpdatedDateBlog } from '../types/blog';
 
 interface BlogsProps {
   blogs: Blog[];
@@ -8,9 +8,28 @@ interface BlogsProps {
 function Sidebar({ blogs }: BlogsProps) {
   const [isExtended, setIsExtended] = useState(false);
   const [filterIsExtended, setFilterIsExtended] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState<string | null>(null);
+  const [currentFilter, setCurrentFilter] = useState<string>('Recent');
+  const [filteredBlogs, setFilteredBlogs] = useState<UpdatedDateBlog[]>([]);
 
   function navigateToBlog() {}
+
+  useEffect(() => {}, [currentFilter]);
+
+  useEffect(() => {
+    const updatedBlogs: UpdatedDateBlog[] = blogs
+      .map((blog) => {
+        return {
+          ...blog,
+          createdAt: new Date(blog.createdAt),
+          updatedAt: new Date(blog.updatedAt),
+        };
+      })
+      .sort((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      });
+
+    setFilteredBlogs(updatedBlogs);
+  }, [blogs]);
 
   return (
     <div
@@ -48,7 +67,7 @@ function Sidebar({ blogs }: BlogsProps) {
           </button>
         </div>
       )}
-      {blogs.map((blog) => {
+      {filteredBlogs.map((blog) => {
         let shortenedName;
         if (!isExtended) {
           if (blog.title.length >= 13) {
