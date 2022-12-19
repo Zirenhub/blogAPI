@@ -22,6 +22,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 0,
+    'no-underscore-dangle': 0,
   },
   ignorePatterns: ['tailwind.config.cjs', 'postcss.config.cjs'],
 };
