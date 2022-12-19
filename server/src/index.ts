@@ -3,6 +3,7 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 // routes
 import indexRoute from './routes/index';
 import authRoute from './routes/auth';
@@ -10,6 +11,11 @@ import authRoute from './routes/auth';
 const app = express();
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
