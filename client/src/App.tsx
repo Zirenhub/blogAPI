@@ -1,17 +1,36 @@
+import { useEffect, useState } from 'react';
+import Header from './components/header';
+import Sidebar from './components/sidebar';
+import Blog from './types/blog';
+
 function App() {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        const res = await fetch('http://localhost:7500/');
+        const newBlogs = await res.json();
+        if (newBlogs.status === 'success') {
+          setBlogs(newBlogs.data);
+        } else {
+          throw new Error('Something went wrong fetching posts');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchBlogs();
+  }, []);
+
   return (
-    <header className="bg-primary flex items-center justify-between p-5">
-      <h1 className="text-3xl ">Personal Blog</h1>
-      <div>
-        <button
-          type="button"
-          className="transition-all hover:scale-105 hover:underline hover:underline-offset-4"
-        >
-          All Enteries
-        </button>
+    <>
+      <Header />
+      <div className="flex grow">
+        <Sidebar blogs={blogs} />
       </div>
-    </header>
+    </>
   );
 }
-
 export default App;
