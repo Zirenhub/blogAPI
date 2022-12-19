@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Header from './components/header';
 import Sidebar from './components/sidebar';
-import Blog from './types/blog';
+import { Blog } from './types/blog';
 
 function App() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
