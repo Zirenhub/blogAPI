@@ -1,44 +1,46 @@
 import { useEffect, useState } from 'react';
-import { Blog, UpdatedDateBlog } from '../types/blog';
+import { UpdatedDateBlog } from '../types/blog';
 
-interface BlogsProps {
-  blogs: Blog[];
+interface SidebarProps {
+  blogs: UpdatedDateBlog[];
+  setBlog: React.Dispatch<React.SetStateAction<UpdatedDateBlog | null>>;
+  setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Sidebar({ blogs }: BlogsProps) {
-  const [isExtended, setIsExtended] = useState(false);
-  const [filterIsExtended, setFilterIsExtended] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState<string>('Recent');
+function Sidebar({ blogs, setBlog, setSidebar }: SidebarProps) {
+  const [isExtended, setIsExtended] = useState<boolean>(false);
+  const [filterIsExtended, setFilterIsExtended] = useState<boolean>(false);
+  const [currentFilter, setCurrentFilter] = useState<string | null>(null);
   const [filteredBlogs, setFilteredBlogs] = useState<UpdatedDateBlog[]>([]);
-
-  function navigateToBlog() {}
 
   useEffect(() => {}, [currentFilter]);
 
   useEffect(() => {
-    const updatedBlogs: UpdatedDateBlog[] = blogs
-      .map((blog) => {
-        return {
-          ...blog,
-          createdAt: new Date(blog.createdAt),
-          updatedAt: new Date(blog.updatedAt),
-        };
-      })
-      .sort((a, b) => {
+    function sortMostRecent() {
+      return blogs.sort((a, b) => {
         return b.createdAt.getTime() - a.createdAt.getTime();
       });
+    }
 
-    setFilteredBlogs(updatedBlogs);
+    setFilteredBlogs(sortMostRecent());
+    setCurrentFilter('Recent');
   }, [blogs]);
 
   return (
     <div
-      className="flex font-bold ease-in-out duration-300 flex-col gap-5 p-5 bg-primary border-t-4 border-r-4 border-slate-700 w-60 hover:w-80"
+      className="flex h-full font-bold ease-in-out duration-300 flex-col gap-5 p-5 bg-primary absolute w-64 hover:w-96"
       onMouseOver={() => setIsExtended(true)}
       onMouseOut={() => setIsExtended(false)}
       onFocus={() => setIsExtended(true)} // jsx-a11y
       onBlur={() => setIsExtended(false)} // jsx-a11y
     >
+      <button
+        type="button"
+        onClick={() => setSidebar(false)}
+        className="text-white w-fit"
+      >
+        X
+      </button>
       <div className="flex justify-between">
         <button
           type="button"
@@ -79,7 +81,7 @@ function Sidebar({ blogs }: BlogsProps) {
           <button
             key={blog._id}
             type="button"
-            onClick={navigateToBlog}
+            onClick={() => setBlog(blog)}
             className="text-text p-2 rounded bg-red-500 transition-all hover:scale-105 hover:bg-blue-400"
           >
             {shortenedName || blog.title}
