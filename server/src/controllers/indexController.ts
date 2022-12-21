@@ -88,27 +88,37 @@ export const writeComment = [
   },
 ];
 
-export const createPost = async (req: IRequestUser, res: Response) => {
-  const title: string = req.body.title;
-  const content: string = req.body.content;
-  const author: Types.ObjectId = req.user._id;
-  const isPrivate: boolean = req.body.isPrivate;
+export const createPost = [
+  body('title').trim().escape().notEmpty().withMessage('Title cannot be empty'),
+  body('content')
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage('Content cannot be empty'),
+  body('isPrivate').isBoolean().withMessage('Post has to be private or public'),
 
-  const newPost = new PostModel({
-    title,
-    content,
-    author,
-    isPrivate,
-  });
+  async (req: IRequestUser, res: Response) => {
+    const title: string = req.body.title;
+    const content: string = req.body.content;
+    const author: Types.ObjectId = req.user._id;
+    const isPrivate: boolean = req.body.isPrivate;
 
-  try {
-    const createdPost = await newPost.save();
-    res
-      .status(201)
-      .json({ status: 'success', data: createdPost, message: null });
-  } catch (err) {
-    res
-      .status(400)
-      .json({ status: 'error', code: 400, data: err, message: null });
-  }
-};
+    const newPost = new PostModel({
+      title,
+      content,
+      author,
+      isPrivate,
+    });
+
+    try {
+      const createdPost = await newPost.save();
+      res
+        .status(201)
+        .json({ status: 'success', data: createdPost, message: null });
+    } catch (err) {
+      res
+        .status(400)
+        .json({ status: 'error', code: 400, data: err, message: null });
+    }
+  },
+];

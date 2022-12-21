@@ -17,7 +17,7 @@ const PostSchema = new Schema<IPost>(
     },
     content: {
       type: String,
-      requirted: true,
+      required: true,
     },
     author: {
       type: Schema.Types.ObjectId,
