@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
+import { Transition } from '@headlessui/react';
 import Main from './components/main';
+import Sidebar from './components/sidebar';
 import Header from './components/header';
 import { Blog, UpdatedDateBlog } from './types/blog';
+import SignUp from './components/signup';
 
 function App() {
   const [blogs, setBlogs] = useState<UpdatedDateBlog[]>([]);
   const [activeBlog, setActiveBlog] = useState<UpdatedDateBlog | null>(null);
+  const [error, setError] = useState(null);
+  const [sidebar, setSidebar] = useState<boolean>(false);
+  const [signUp, setSignUp] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -30,10 +36,10 @@ function App() {
             setActiveBlog(welcomeBlog);
           }
         } else {
-          throw new Error('Something went wrong fetching posts');
+          throw { ...resData };
         }
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        setError(err);
       }
     }
 
@@ -42,7 +48,38 @@ function App() {
 
   return (
     <div className="h-full flex flex-col">
-      <Header blogs={blogs} setBlog={setActiveBlog} />
+      <Header setSidebar={setSidebar} setSignUp={setSignUp} />
+      <Transition
+        show={sidebar}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+        className="absolute h-full top-0 left-0"
+      >
+        <Sidebar
+          blogs={blogs}
+          setActiveBlog={setActiveBlog}
+          setSidebar={setSidebar}
+          error={error}
+        />
+      </Transition>
+      <Transition
+        show={signUp}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+        <div className="absolute">
+          <SignUp setSignUp={setSignUp} />
+        </div>
+      </Transition>
       <Main activeBlog={activeBlog} />
     </div>
   );

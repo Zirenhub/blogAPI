@@ -3,11 +3,12 @@ import { UpdatedDateBlog } from '../types/blog';
 
 interface SidebarProps {
   blogs: UpdatedDateBlog[];
-  setBlog: React.Dispatch<React.SetStateAction<UpdatedDateBlog | null>>;
+  setActiveBlog: React.Dispatch<React.SetStateAction<UpdatedDateBlog | null>>;
   setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  error: any;
 }
 
-function Sidebar({ blogs, setBlog, setSidebar }: SidebarProps) {
+function Sidebar({ blogs, setActiveBlog, setSidebar, error }: SidebarProps) {
   const [isExtended, setIsExtended] = useState<boolean>(false);
   const [filterIsExtended, setFilterIsExtended] = useState<boolean>(false);
   const [currentFilter, setCurrentFilter] = useState<string | null>(null);
@@ -41,6 +42,7 @@ function Sidebar({ blogs, setBlog, setSidebar }: SidebarProps) {
       >
         X
       </button>
+      {error && <p>Something went wrong.</p>}
       <div className="flex justify-between">
         <button
           type="button"
@@ -81,7 +83,7 @@ function Sidebar({ blogs, setBlog, setSidebar }: SidebarProps) {
           <button
             key={blog._id}
             type="button"
-            onClick={() => setBlog(blog)}
+            onClick={() => setActiveBlog(blog)}
             className="text-text p-2 rounded bg-red-500 transition-all hover:scale-105 hover:bg-blue-400"
           >
             {shortenedName || blog.title}
