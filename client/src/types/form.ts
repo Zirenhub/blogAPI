@@ -1,4 +1,4 @@
-export type Error = {
+export type FormError = {
   location: string;
   msg: string;
   param: string;

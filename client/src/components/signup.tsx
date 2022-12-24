@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Error } from '../types/form';
+import { FormError } from '../types/form';
 
 interface SignUpPropms {
   setSignUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,7 +11,8 @@ function SignUp({ setSignUp }: SignUpPropms) {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
-  const [errors, setErros] = useState<Error[] | null>(null);
+  const [errors, setErrors] = useState<FormError[] | null>(null);
+  const [specificError, setSpecificError] = useState<string | null>(null);
 
   function handleUsername(e: React.SyntheticEvent) {
     const target = e.target as HTMLInputElement;
@@ -43,7 +44,11 @@ function SignUp({ setSignUp }: SignUpPropms) {
       });
       const resData = await res.json();
       if (resData.status === 'error') {
-        setErros(resData.data.errors);
+        if (resData.data?.errors.isArray()) {
+          setErrors(resData.data.errors);
+        } else if (resData.message) {
+          setSpecificError(resData.message);
+        }
       } else {
         setSignUp(false);
       }
@@ -122,6 +127,7 @@ function SignUp({ setSignUp }: SignUpPropms) {
             })}
           </ul>
         )}
+        {specificError && <p>{specificError}</p>}
 
         <input
           type="submit"
