@@ -5,6 +5,7 @@ import Sidebar from './components/sidebar';
 import Header from './components/header';
 import { Blog, UpdatedDateBlog } from './types/blog';
 import SignUp from './components/signup';
+import LogIn from './components/login';
 
 function App() {
   const [blogs, setBlogs] = useState<UpdatedDateBlog[]>([]);
@@ -12,6 +13,7 @@ function App() {
   const [error, setError] = useState(null);
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [signUp, setSignUp] = useState<boolean>(false);
+  const [logIn, setLogIn] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -48,6 +50,9 @@ function App() {
 
   return (
     <div className="h-full flex flex-col">
+      {(signUp || logIn) && (
+        <div className="absolute z-10 w-screen h-screen bg-gray-100/[.4]" />
+      )}
       <Header setSidebar={setSidebar} setSignUp={setSignUp} />
       <Transition
         show={sidebar}
@@ -74,11 +79,21 @@ function App() {
         leave="transition-opacity duration-150"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-1/3"
       >
-        <div className="absolute">
-          <SignUp setSignUp={setSignUp} />
-        </div>
+        <SignUp setSignUp={setSignUp} />
+      </Transition>
+      <Transition
+        show={logIn}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-1/3"
+      >
+        <LogIn />
       </Transition>
       <Main activeBlog={activeBlog} />
     </div>
