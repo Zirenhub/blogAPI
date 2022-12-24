@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import { IRequestUser } from '../middleware/jwtAuth';
+import { Types } from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import UserModel from '../models/user';
@@ -43,12 +45,7 @@ export const logInUser = [
             expiresIn: '1h',
           });
 
-          res.cookie('token', token, {
-            httpOnly: true,
-            // secure: true, // https
-          });
-
-          res.json({ status: 'success', data: null, message: null });
+          res.json({ token, user });
         } else {
           res.status(403).json({
             status: 'error',
@@ -122,10 +119,20 @@ export const signUpUser = [
           .status(201)
           .json({ status: 'success', data: createdUser, message: null });
       } catch (err) {
-        res
-          .status(400)
-          .json({ status: 'error', code: 400, data: err, message: null });
+        res.status(400).json({
+          status: 'error',
+          code: 400,
+          data: err,
+          message: 'Something went wrong saving user',
+        });
       }
     }
   },
 ];
+
+export const getMe = async (req: IRequestUser, res: Response) => {
+  const userID: Types.ObjectId = req.user._id;
+  const user = await UserModel.findById(userID);
+
+  res.json({ status: 'success', data: user, message: null });
+};

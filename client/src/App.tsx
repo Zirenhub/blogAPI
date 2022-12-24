@@ -14,6 +14,7 @@ function App() {
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [signUp, setSignUp] = useState<boolean>(false);
   const [logIn, setLogIn] = useState<boolean>(false);
+  const [user, setUser] = useState<object | null>(null);
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -44,8 +45,18 @@ function App() {
         setError(err);
       }
     }
+    async function getUser() {
+      try {
+        const res = await fetch('http://localhost:7500/auth/me');
+        const resData = await res.json();
+        console.log(resData);
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
     fetchBlogs();
+    getUser();
   }, []);
 
   return (
