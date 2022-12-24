@@ -44,7 +44,7 @@ function SignUp({ setSignUp }: SignUpPropms) {
       });
       const resData = await res.json();
       if (resData.status === 'error') {
-        if (resData.data?.errors.isArray()) {
+        if (resData.data?.errors) {
           setErrors(resData.data.errors);
         } else if (resData.message) {
           setSpecificError(resData.message);
