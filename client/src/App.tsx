@@ -53,7 +53,11 @@ function App() {
       {(signUp || logIn) && (
         <div className="absolute z-10 w-screen h-screen bg-gray-100/[.4]" />
       )}
-      <Header setSidebar={setSidebar} setSignUp={setSignUp} />
+      <Header
+        setSidebar={setSidebar}
+        setSignUp={setSignUp}
+        setLogIn={setLogIn}
+      />
       <Transition
         show={sidebar}
         enter="transition-opacity duration-75"
@@ -93,7 +97,7 @@ function App() {
         leaveTo="opacity-0"
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-1/3"
       >
-        <LogIn />
+        <LogIn setLogIn={setLogIn} />
       </Transition>
       <Main activeBlog={activeBlog} />
     </div>

@@ -1,9 +1,10 @@
 interface HeaderProps {
   setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   setSignUp: React.Dispatch<React.SetStateAction<boolean>>;
+  setLogIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Header({ setSidebar, setSignUp }: HeaderProps) {
+function Header({ setSidebar, setSignUp, setLogIn }: HeaderProps) {
   return (
     <div className="flex justify-between p-4 items-center bg-secondary text-dimWhite font-bold">
       <div className="flex gap-5 items-center">
@@ -24,7 +25,9 @@ function Header({ setSidebar, setSignUp }: HeaderProps) {
         <button type="button" onClick={() => setSignUp(true)}>
           Sign Up
         </button>
-        <button type="button">Log In</button>
+        <button type="button" onClick={() => setLogIn(true)}>
+          Log In
+        </button>
       </div>
     </div>
   );
