@@ -32,12 +32,14 @@ function LogIn({ setLogIn }: LogInPropms) {
       });
       const resData = await res.json();
       if (resData.status === 'error') {
-        if (resData.data?.errors.isArray()) {
+        if (resData.data?.errors) {
           setErrors(resData.data.errors);
         } else if (resData.message) {
           setSpecificError(resData.message);
         }
       } else {
+        console.log(resData);
+
         setLogIn(false);
       }
     }
