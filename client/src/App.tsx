@@ -6,6 +6,7 @@ import Header from './components/header';
 import { Blog, UpdatedDateBlog } from './types/blog';
 import SignUp from './components/signup';
 import LogIn from './components/login';
+import { User } from './types/user';
 
 function App() {
   const [blogs, setBlogs] = useState<UpdatedDateBlog[]>([]);
@@ -14,7 +15,7 @@ function App() {
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [signUp, setSignUp] = useState<boolean>(false);
   const [logIn, setLogIn] = useState<boolean>(false);
-  const [user, setUser] = useState<object | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -46,12 +47,13 @@ function App() {
       }
     }
     async function getUser() {
-      try {
-        const res = await fetch('http://localhost:7500/auth/me');
-        const resData = await res.json();
-        console.log(resData);
-      } catch (err) {
-        console.log(err);
+      const res = await fetch('http://localhost:7500/auth/me', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const resData = await res.json();
+      if (resData.status === 'success') {
+        setUser(resData.data);
       }
     }
 
@@ -68,6 +70,8 @@ function App() {
         setSidebar={setSidebar}
         setSignUp={setSignUp}
         setLogIn={setLogIn}
+        setUser={setUser}
+        user={user}
       />
       <Transition
         show={sidebar}

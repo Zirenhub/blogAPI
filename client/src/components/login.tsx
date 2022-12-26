@@ -28,6 +28,7 @@ function LogIn({ setLogIn }: LogInPropms) {
       const res = await fetch('http://localhost:7500/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
       const resData = await res.json();
@@ -38,9 +39,7 @@ function LogIn({ setLogIn }: LogInPropms) {
           setSpecificError(resData.message);
         }
       } else {
-        console.log(resData);
-
-        setLogIn(false);
+        window.location.reload();
       }
     }
   }
