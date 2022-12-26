@@ -7,7 +7,7 @@ import CommentModel from '../models/comment';
 
 export const getPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await PostModel.find({});
+    const posts = await PostModel.find({}, 'title createdAt updatedAt');
     res.json({ status: 'success', data: posts, message: null });
   } catch (err) {
     res
