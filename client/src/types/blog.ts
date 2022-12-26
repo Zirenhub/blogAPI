@@ -9,13 +9,16 @@ export type Blog = {
   _v: number;
 };
 
-export type UpdatedDateBlog = {
+export type BlogOverview = {
   _id: string;
   title: string;
-  content: string;
-  author: string;
-  isPrivate: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type BlogOverviewUpdated = {
+  _id: string;
+  title: string;
   createdAt: Date;
   updatedAt: Date;
-  _v: number;
 };

@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
-import { UpdatedDateBlog } from '../types/blog';
+import { redirect } from 'react-router-dom';
+import { BlogOverviewUpdated } from '../types/blog';
 
 interface SidebarProps {
-  blogs: UpdatedDateBlog[];
-  setActiveBlog: React.Dispatch<React.SetStateAction<UpdatedDateBlog | null>>;
+  blogs: BlogOverviewUpdated[];
   setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   error: any;
 }
 
-function Sidebar({ blogs, setActiveBlog, setSidebar, error }: SidebarProps) {
+function Sidebar({ blogs, setSidebar, error }: SidebarProps) {
   const [isExtended, setIsExtended] = useState<boolean>(false);
   const [filterIsExtended, setFilterIsExtended] = useState<boolean>(false);
   const [currentFilter, setCurrentFilter] = useState<string | null>(null);
-  const [filteredBlogs, setFilteredBlogs] = useState<UpdatedDateBlog[]>([]);
-
-  useEffect(() => {}, [currentFilter]);
+  const [filteredBlogs, setFilteredBlogs] = useState<BlogOverviewUpdated[]>([]);
 
   useEffect(() => {
     function sortMostRecent() {
@@ -83,7 +81,7 @@ function Sidebar({ blogs, setActiveBlog, setSidebar, error }: SidebarProps) {
           <button
             key={blog._id}
             type="button"
-            onClick={() => setActiveBlog(blog)}
+            onClick={() => redirect(`/${blog._id}`)}
             className="text-text p-2 rounded bg-red-500 transition-all hover:scale-105 hover:bg-blue-400"
           >
             {shortenedName || blog.title}
