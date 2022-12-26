@@ -41,11 +41,19 @@ export const logInUser = [
 
       bcrypt.compare(password, user.password).then((result) => {
         if (result) {
-          const token = jwt.sign({ _id: user._id }, process.env.MY_SECRET!, {
-            expiresIn: '1h',
+          const token = jwt.sign(
+            { _id: user._id.toString() },
+            process.env.MY_SECRET!,
+            {
+              expiresIn: '1h',
+            }
+          );
+
+          res.cookie('token', token, {
+            httpOnly: true, // accessible only by web server
           });
 
-          res.json({ token, user });
+          res.json({ status: 'success', data: token, message: null });
         } else {
           res.status(403).json({
             status: 'error',
@@ -135,4 +143,18 @@ export const getMe = async (req: IRequestUser, res: Response) => {
   const user = await UserModel.findById(userID);
 
   res.json({ status: 'success', data: user, message: null });
+};
+
+export const logOut = async (req: Request, res: Response) => {
+  const cookies = req.cookies;
+  if (!cookies?.token) {
+    return res.status(204).json({
+      status: 'error',
+      code: 204,
+      data: null,
+      message: 'No content.',
+    });
+  }
+  res.clearCookie('token', { httpOnly: true });
+  res.json({ status: 'success', data: null, message: 'cookie cleared' });
 };
