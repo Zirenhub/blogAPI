@@ -29,6 +29,12 @@ module.exports = {
       maxWidth: {
         sidebar: '15rem',
       },
+      minWidth: {
+        comment: '30rem',
+      },
+      backgroundImage: {
+        profilePic: "url('/images/Default_pfp.svg')",
+      },
     },
   },
   plugins: [],
