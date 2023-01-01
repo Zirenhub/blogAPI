@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BlogOverviewUpdated } from '../types/blog';
 
 interface SidebarProps {
@@ -13,6 +13,8 @@ function Sidebar({ blogs, setSidebar, error }: SidebarProps) {
   const [filterIsExtended, setFilterIsExtended] = useState<boolean>(false);
   const [currentFilter, setCurrentFilter] = useState<string | null>(null);
   const [filteredBlogs, setFilteredBlogs] = useState<BlogOverviewUpdated[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     function sortMostRecent() {
@@ -81,7 +83,7 @@ function Sidebar({ blogs, setSidebar, error }: SidebarProps) {
           <button
             key={blog._id}
             type="button"
-            onClick={() => redirect(`/${blog._id}`)}
+            onClick={() => navigate(`/${blog._id}`)}
             className="text-text p-2 rounded bg-red-500 transition-all hover:scale-105 hover:bg-blue-400"
           >
             {shortenedName || blog.title}
