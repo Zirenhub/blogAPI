@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BlogOverview, BlogOverviewUpdated } from './types/blog';
+import { BlogOverview, BlogOverviewRaw } from './types/blog';
 import Main from './components/main';
 import Sidebar from './components/sidebar';
 import Header from './components/header';
@@ -9,8 +9,8 @@ import SignUp from './components/signup';
 import LogIn from './components/login';
 
 function App() {
-  const [blogs, setBlogs] = useState<BlogOverviewUpdated[]>([]);
-  const [blog, setBlog] = useState<string | null>(null);
+  const [blogs, setBlogs] = useState<BlogOverview[]>([]);
+  const [blogID, setBlogID] = useState<string | null>(null);
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [signUp, setSignUp] = useState<boolean>(false);
   const [logIn, setLogIn] = useState<boolean>(false);
@@ -25,9 +25,9 @@ function App() {
         const res = await fetch('http://localhost:7500/');
         const resData = await res.json();
         if (resData.status === 'success') {
-          const resBlogs: BlogOverview[] = resData.data;
-          const updatedBlogs: BlogOverviewUpdated[] = resBlogs.map(
-            (x: BlogOverview) => {
+          const resBlogs: BlogOverviewRaw[] = resData.data;
+          const updatedBlogs: BlogOverview[] = resBlogs.map(
+            (x: BlogOverviewRaw) => {
               return {
                 ...x,
                 createdAt: new Date(x.createdAt),
@@ -47,7 +47,7 @@ function App() {
     if (!id) {
       navigate('/63a311718384a3be7cb2b6be');
     } else {
-      setBlog(id);
+      setBlogID(id);
     }
 
     fetchBlogs();
@@ -99,7 +99,7 @@ function App() {
       >
         <LogIn setLogIn={setLogIn} />
       </Transition>
-      <Main blogID={blog} />
+      <Main blogID={blogID} />
     </div>
   );
 }

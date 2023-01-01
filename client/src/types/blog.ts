@@ -6,17 +6,17 @@ export type Blog = {
   isPrivate: boolean;
   createdAt: string;
   updatedAt: string;
-  _v: number;
+  __v: number;
 };
 
-export type BlogOverview = {
+export type BlogOverviewRaw = {
   _id: string;
   title: string;
   createdAt: string;
   updatedAt: string;
 };
 
-export type BlogOverviewUpdated = {
+export type BlogOverview = {
   _id: string;
   title: string;
   createdAt: Date;
