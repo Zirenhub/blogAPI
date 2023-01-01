@@ -1,29 +1,48 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BlogOverviewUpdated } from '../types/blog';
+import { BlogOverview, BlogOverviewRaw } from '../types/blog';
 
 interface SidebarProps {
-  blogs: BlogOverviewUpdated[];
   setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
-  error: any;
 }
 
-function Sidebar({ blogs, setSidebar, error }: SidebarProps) {
+function Sidebar({ setSidebar }: SidebarProps) {
   const [isExtended, setIsExtended] = useState<boolean>(false);
   const [filterIsExtended, setFilterIsExtended] = useState<boolean>(false);
   const [currentFilter, setCurrentFilter] = useState<string | null>(null);
-  const [filteredBlogs, setFilteredBlogs] = useState<BlogOverviewUpdated[]>([]);
+  const [blogs, setBlogs] = useState<BlogOverview[]>([]);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    function sortMostRecent() {
-      return blogs.sort((a, b) => {
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      });
+    async function fetchBlogs() {
+      try {
+        const res = await fetch('http://localhost:7500/');
+        const resData = await res.json();
+        if (resData.status === 'success') {
+          const resBlogs: BlogOverviewRaw[] = resData.data;
+          const updatedBlogs: BlogOverview[] = resBlogs
+            .map((x: BlogOverviewRaw) => {
+              return {
+                ...x,
+                createdAt: new Date(x.createdAt),
+                updatedAt: new Date(x.updatedAt),
+              };
+            })
+            .sort((a, b) => {
+              return b.createdAt.getTime() - a.createdAt.getTime();
+            });
+          setBlogs(updatedBlogs);
+        } else {
+          throw { ...resData };
+        }
+      } catch (err: any) {
+        setError(err);
+      }
     }
 
-    setFilteredBlogs(sortMostRecent());
+    fetchBlogs();
     setCurrentFilter('Recent');
   }, [blogs]);
 
@@ -71,7 +90,7 @@ function Sidebar({ blogs, setSidebar, error }: SidebarProps) {
           </button>
         </div>
       )}
-      {filteredBlogs.map((blog) => {
+      {blogs.map((blog) => {
         let shortenedName;
         if (!isExtended) {
           if (blog.title.length >= 13) {

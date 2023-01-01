@@ -1,29 +1,28 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Blog } from '../types/blog';
 import Comment from './comment';
 
-interface MainProps {
-  blogID: string | null;
-}
-
-function Main({ blogID }: MainProps) {
+function Main() {
   const [blog, setBlog] = useState<Blog | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const { id } = useParams();
+
   useEffect(() => {
     async function getBlog() {
-      const res = await fetch(`http://localhost:7500/${blogID}`);
+      const res = await fetch(`http://localhost:7500/${id}`);
       const resData = await res.json();
 
       if (resData.status === 'success') {
         setBlog(resData.data);
       } else {
-        setError('Post not found');
+        setError(resData.message || 'Post not found');
       }
     }
 
-    if (blogID) getBlog();
-  }, [blogID]);
+    if (id) getBlog();
+  }, [id]);
 
   if (error) {
     return (
@@ -46,7 +45,7 @@ function Main({ blogID }: MainProps) {
             </article>
           </div>
           <div className="flex justify-center border-t-2 p-5 bg-gray-100">
-            <Comment blogID={blogID} />
+            {blog && <Comment blogID={blog._id} />}
           </div>
         </div>
       )}

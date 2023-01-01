@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Transition } from '@headlessui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BlogOverview, BlogOverviewRaw } from './types/blog';
+import { Transition } from '@headlessui/react';
 import Main from './components/main';
 import Sidebar from './components/sidebar';
 import Header from './components/header';
@@ -9,52 +8,21 @@ import SignUp from './components/signup';
 import LogIn from './components/login';
 
 function App() {
-  const [blogs, setBlogs] = useState<BlogOverview[]>([]);
-  const [blogID, setBlogID] = useState<string | null>(null);
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [signUp, setSignUp] = useState<boolean>(false);
   const [logIn, setLogIn] = useState<boolean>(false);
-  const [error, setError] = useState(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchBlogs() {
-      try {
-        const res = await fetch('http://localhost:7500/');
-        const resData = await res.json();
-        if (resData.status === 'success') {
-          const resBlogs: BlogOverviewRaw[] = resData.data;
-          const updatedBlogs: BlogOverview[] = resBlogs.map(
-            (x: BlogOverviewRaw) => {
-              return {
-                ...x,
-                createdAt: new Date(x.createdAt),
-                updatedAt: new Date(x.updatedAt),
-              };
-            }
-          );
-          setBlogs(updatedBlogs);
-        } else {
-          throw { ...resData };
-        }
-      } catch (err: any) {
-        setError(err);
-      }
-    }
-
     if (!id) {
       navigate('/63a311718384a3be7cb2b6be');
-    } else {
-      setBlogID(id);
     }
-
-    fetchBlogs();
   }, [id, navigate]);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col relative">
       {(signUp || logIn) && (
         <div className="absolute z-10 w-screen h-screen bg-gray-100/[.4]" />
       )}
@@ -71,9 +39,9 @@ function App() {
         leave="transition-opacity duration-150"
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
-        className="absolute h-full top-0 left-0"
+        className="absolute h-full top-0 left-0 bottom-0"
       >
-        <Sidebar blogs={blogs} setSidebar={setSidebar} error={error} />
+        <Sidebar setSidebar={setSidebar} />
       </Transition>
       <Transition
         show={signUp}
@@ -99,7 +67,7 @@ function App() {
       >
         <LogIn setLogIn={setLogIn} />
       </Transition>
-      <Main blogID={blogID} />
+      <Main />
     </div>
   );
 }
