@@ -11,14 +11,6 @@ function Main({ blogID }: MainProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // async function getComments() {
-    //   try {
-    //     // const res = await fetch('http://localhost:7500/');
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-
     async function getBlog() {
       const res = await fetch(`http://localhost:7500/${blogID}`);
       const resData = await res.json();
@@ -53,8 +45,8 @@ function Main({ blogID }: MainProps) {
               <p>{blog.content}</p>
             </article>
           </div>
-          <div className="flex justify-center border-t-2 pt-5 bg-gray-100">
-            <Comment />
+          <div className="flex justify-center border-t-2 p-5 bg-gray-100">
+            <Comment blogID={blogID} />
           </div>
         </div>
       )}
