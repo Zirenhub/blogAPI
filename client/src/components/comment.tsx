@@ -29,9 +29,12 @@ function Comment({ blogID }: CommentProps) {
       const resData = await res.json();
       if (resData.status === 'success') {
         const resComment: CommentT = resData.data;
+        resComment.createdAt = new Date(resComment.createdAt);
+        resComment.updatedAt = new Date(resComment.updatedAt);
         setComments((current) => [resComment, ...current]);
       }
     }
+    setComment('');
   }
 
   useEffect(() => {
@@ -40,15 +43,17 @@ function Comment({ blogID }: CommentProps) {
       const resData = await res.json();
       if (resData.status === 'success') {
         const resComments = resData.data;
-        const updatedComments: CommentT[] = resComments.map(
-          (x: CommentTRaw) => {
+        const updatedComments: CommentT[] = resComments
+          .map((x: CommentTRaw) => {
             return {
               ...x,
               createdAt: new Date(x.createdAt),
               updatedAt: new Date(x.updatedAt),
             };
-          }
-        );
+          })
+          .sort((a: CommentT, b: CommentT) => {
+            return b.createdAt.getTime() - a.createdAt.getTime();
+          });
         setComments(updatedComments);
       } else {
         setGetCommentsErr(
@@ -92,9 +97,21 @@ function Comment({ blogID }: CommentProps) {
                 key={x._id}
                 className="rounded border-2 bg-gray-50 p-2 w-fit"
               >
-                <p className="border-b-2 w-fit text-gray-500">
-                  {x.author.username}
-                </p>
+                <div className="flex justify-between gap-20">
+                  <p className="border-b-2 w-fit text-gray-500">
+                    {x.author.username}
+                  </p>
+                  <p className="text-gray-400">
+                    {x.createdAt.toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                    })}
+                  </p>
+                </div>
                 <p>{x.content}</p>
               </div>
             );
