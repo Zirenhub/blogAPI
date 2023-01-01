@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App';
 import './index.css';
+import { UserProvider } from './context/userContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,10 +12,12 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/:id" element={<App />} />
-      </Routes>
+      <UserProvider>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/:id" element={<App />} />
+        </Routes>
+      </UserProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

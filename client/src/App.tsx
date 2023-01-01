@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react';
-import { redirect, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BlogOverview, BlogOverviewUpdated } from './types/blog';
-import { User } from './types/user';
 import Main from './components/main';
 import Sidebar from './components/sidebar';
 import Header from './components/header';
@@ -15,10 +14,10 @@ function App() {
   const [sidebar, setSidebar] = useState<boolean>(false);
   const [signUp, setSignUp] = useState<boolean>(false);
   const [logIn, setLogIn] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState(null);
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -44,25 +43,15 @@ function App() {
         setError(err);
       }
     }
-    async function getUser() {
-      const res = await fetch('http://localhost:7500/auth/me', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      const resData = await res.json();
-      if (resData.status === 'success') {
-        setUser(resData.data);
-      }
-    }
 
     if (!id) {
-      return redirect('/63a311718384a3be7cb2b6be');
+      navigate('/63a311718384a3be7cb2b6be');
+    } else {
+      setBlog(id);
     }
-    setBlog(id);
 
     fetchBlogs();
-    getUser();
-  }, [id]);
+  }, [id, navigate]);
 
   return (
     <div className="h-full flex flex-col">
@@ -73,8 +62,6 @@ function App() {
         setSidebar={setSidebar}
         setSignUp={setSignUp}
         setLogIn={setLogIn}
-        setUser={setUser}
-        user={user}
       />
       <Transition
         show={sidebar}
@@ -112,7 +99,7 @@ function App() {
       >
         <LogIn setLogIn={setLogIn} />
       </Transition>
-      <Main activeBlog={activeBlog} />
+      <Main blogID={blog} />
     </div>
   );
 }

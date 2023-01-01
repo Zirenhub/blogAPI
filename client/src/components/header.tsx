@@ -1,20 +1,15 @@
-import { User } from '../types/user';
+import { useContext } from 'react';
+import { UserContext } from '../context/userContext';
 
 interface HeaderProps {
   setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   setSignUp: React.Dispatch<React.SetStateAction<boolean>>;
   setLogIn: React.Dispatch<React.SetStateAction<boolean>>;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  user: User | null;
 }
 
-function Header({
-  setSidebar,
-  setSignUp,
-  setLogIn,
-  setUser,
-  user,
-}: HeaderProps) {
+function Header({ setSidebar, setSignUp, setLogIn }: HeaderProps) {
+  const [user, setUser] = useContext(UserContext);
+
   async function logOut() {
     const res = await fetch('http://localhost:7500/auth/logout', {
       method: 'POST',
