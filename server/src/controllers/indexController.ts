@@ -96,7 +96,7 @@ export const getComments = async (req: Request, res: Response) => {
     try {
       const comments = await CommentModel.find({ post: postID }).populate(
         'author',
-        'username -_id'
+        'username'
       );
       res.json({ status: 'success', data: comments, message: null });
     } catch (err) {

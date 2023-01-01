@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Blog } from '../types/blog';
-import Comment from './comment';
+import Comment from './Comment';
 
 function Main() {
   const [blog, setBlog] = useState<Blog | null>(null);

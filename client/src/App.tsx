@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Transition } from '@headlessui/react';
-import Main from './components/main';
-import Sidebar from './components/sidebar';
-import Header from './components/header';
-import SignUp from './components/signup';
-import LogIn from './components/login';
+import Main from './components/Main';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import SignUp from './components/Signup';
+import LogIn from './components/Login';
 
 function App() {
   const [sidebar, setSidebar] = useState<boolean>(false);
