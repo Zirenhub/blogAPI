@@ -55,7 +55,7 @@ export const writeComment = [
     } else {
       const author: Types.ObjectId = req.user._id;
       const content: string = req.body.content;
-      const post: Types.ObjectId = req.body.post;
+      const post: string = req.params.id;
 
       const postRef = await PostModel.findById(post);
 
@@ -67,6 +67,7 @@ export const writeComment = [
         });
 
         try {
+          newComment.populate('author', 'username -_id');
           const createdComment = await newComment.save();
           res
             .status(201)
@@ -87,6 +88,31 @@ export const writeComment = [
     }
   },
 ];
+
+export const getComments = async (req: Request, res: Response) => {
+  const postID: string = req.params.id;
+  const post = await PostModel.findById(postID);
+  if (post) {
+    try {
+      const comments = await CommentModel.find({ post: postID }).populate(
+        'author',
+        'username -_id'
+      );
+      res.json({ status: 'success', data: comments, message: null });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ status: 'error', code: 500, data: err, message: null });
+    }
+  } else {
+    res.status(400).json({
+      status: 'error',
+      code: 400,
+      data: null,
+      message: 'Invalid Post',
+    });
+  }
+};
 
 export const createPost = [
   body('title').trim().escape().notEmpty().withMessage('Title cannot be empty'),

@@ -5,11 +5,14 @@ import {
   getPost,
   writeComment,
   createPost,
+  getComments,
 } from '../controllers/indexController';
 
 const router = express.Router();
 
-router.post('/:id/comment', jwtAuth, writeComment);
+router.get('/:id/comments', getComments);
+
+router.post('/:id', jwtAuth, writeComment);
 router.get('/:id', getPost);
 
 router.post('/', jwtAuth, createPost);
