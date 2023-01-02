@@ -148,3 +148,29 @@ export const createPost = [
     }
   },
 ];
+
+export const deleteComment = async (req: IRequestUser, res: Response) => {
+  const postID = req.params.id;
+  const commentID = req.params.comment;
+
+  try {
+    const post = await PostModel.findById(postID);
+    if (post) {
+      const comment = await CommentModel.findById(commentID);
+      // also check if post matches with comment reference
+      if (comment && comment.author.equals(req.user._id)) {
+        comment.deleteOne();
+        res.json({ status: 'success', data: null, message: null });
+      }
+    }
+  } catch (err) {
+    res
+      .status(400)
+      .json({
+        status: 'error',
+        code: 400,
+        data: err,
+        message: 'Something went wront deleting this comment',
+      });
+  }
+};

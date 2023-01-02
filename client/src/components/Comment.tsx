@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/userContext';
 import { CommentT, CommentTRaw } from '../types/comment';
-import DisplayComments from './DisplayComments';
+import DisplayComments from './DisplayComment';
 
 interface CommentProps {
   blogID: string | null;
@@ -91,7 +91,19 @@ function Comment({ blogID }: CommentProps) {
       {getCommentsErr ? (
         <p>{getCommentsErr}</p>
       ) : (
-        <DisplayComments comments={comments} />
+        <div className="mt-5 flex flex-col gap-5">
+          {comments.map((x) => {
+            return (
+              <div key={x._id}>
+                <DisplayComments
+                  comment={x}
+                  comments={comments}
+                  setComments={setComments}
+                />
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );
