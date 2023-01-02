@@ -18,6 +18,7 @@ function Header({ setSidebar, setSignUp, setLogIn }: HeaderProps) {
     const resData = await res.json();
     if (resData.status === 'success') {
       setUser(null);
+      window.location.reload();
     }
   }
 
